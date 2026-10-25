@@ -43,17 +43,15 @@ curl -s -X POST https://api.callin.io/api/public/v1/campaigns \
 Save `data.campaignId` from the response.
 
 ## Read the result
-Calls usually last 1–5 minutes. Poll every 20–30 seconds:
+Calls usually last 1–5 minutes. Poll every 20–30 seconds until `status` is `completed`, `busy`, `no-answer` or `failed`:
 
 ```bash
-curl -s https://api.callin.io/api/public/v1/campaigns/$CAMPAIGN_ID -H "x-api-key: $CALLIN_API_KEY"
 curl -s "https://api.callin.io/api/public/v1/campaigns/$CAMPAIGN_ID/calls" -H "x-api-key: $CALLIN_API_KEY"
 ```
-When the call has ended, fetch the conversation (summary and transcript):
+Take `data[0].callId` and fetch the conversation (summary and transcript):
 
 ```bash
-curl -s "https://api.callin.io/api/public/v1/conversations?agentId=$CALLIN_AGENT_ID&pageSize=5" -H "x-api-key: $CALLIN_API_KEY"
-curl -s "https://api.callin.io/api/public/v1/conversations/$CONVERSATION_ID" -H "x-api-key: $CALLIN_API_KEY"
+curl -s "https://api.callin.io/api/public/v1/conversations/$CALL_ID" -H "x-api-key: $CALLIN_API_KEY"
 ```
 Report to the user: whether the goal was achieved, the key details (time, price, confirmation),
 and anything the other party asked to pass on. Statuses like `busy`, `no-answer` or a

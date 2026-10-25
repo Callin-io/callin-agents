@@ -58,13 +58,13 @@ export class Callin {
     const startedAt = call?.startedAt || camp.metadata?.createdAt;
     const after = startedAt ? Math.floor(Date.parse(startedAt) / 1000) - 120 : undefined;
     let conv = null;
-    if (call?.callId) { try { conv = await this.getConversation(call.callId); } catch {} }
+    if (call?.callId) { try { conv = { conversationId: call.callId, ...(await this.getConversation(call.callId)) }; } catch {} }
     if (!conv) {
       const list = await this.listConversations({ agentId: camp.agentId, pageSize: 20, startAfterUnix: after });
       const num = (call?.contactNumber || to).replace(/\s/g, "");
       let m = list.find(c => num && ((c.contactNumber || "").includes(num) || (c.callerNumber || "").includes(num)));
       if (!m && after) m = list.filter(c => (c.direction || "outbound") === "outbound" && (c.startTimeUnix || 0) >= after).sort((a, b) => a.startTimeUnix - b.startTimeUnix)[0];
-      if (m) { try { conv = await this.getConversation(m.conversationId); } catch { conv = m; } }
+      if (m) { try { conv = { conversationId: m.conversationId, ...(await this.getConversation(m.conversationId)) }; } catch { conv = m; } }
     }
     if (conv) Object.assign(out, { conversationId: conv.conversationId, summary: conv.summary, transcript: conv.transcript, voicemail: conv.voiceMailDetected, durationSeconds: out.durationSeconds ?? conv.conversationDuration });
     return out;

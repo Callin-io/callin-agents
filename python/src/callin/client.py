@@ -205,7 +205,9 @@ class Callin:
         call_id = call.get("callId")
         if call_id:
             try:
-                return self.get_conversation(call_id)
+                conv = self.get_conversation(call_id)
+                conv.setdefault("conversationId", call_id)
+                return conv
             except CallinError:
                 pass
         started = call.get("startedAt")
@@ -229,6 +231,8 @@ class Callin:
         if match is None:
             return None
         try:
-            return self.get_conversation(match["conversationId"])
+            conv = self.get_conversation(match["conversationId"])
+            conv.setdefault("conversationId", match["conversationId"])
+            return conv
         except CallinError:
             return match
