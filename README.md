@@ -6,7 +6,7 @@
 |---|---|
 | Claude, ChatGPT, Cursor, VS Code, OpenAI Agents SDK | MCP server `https://claude-mcp.callin.io/mcp` (OAuth) — registry name `io.callin/callin` |
 | Python | `pip install callin` |
-| LangChain | `pip install "callin[langchain]"` → `from callin.langchain import get_callin_tools` |
+| LangChain | `pip install langchain-callin` → `from langchain_callin import CallinToolkit` (or `callin[langchain]`) |
 | CrewAI | `pip install "callin[crewai]"` → `from callin.crewai import CallinPlaceCallTool` |
 | Node.js | `npm i callin-sdk` |
 | OpenClaw / Claude skills | [`skills/callin-phone/SKILL.md`](skills/callin-phone/SKILL.md) |
