@@ -1,0 +1,5 @@
+{
+  "name": "callin",
+  "owner": { "name": "Callin.io", "email": "hello@callin.io" },
+  "plugins": [{ "name": "callin", "source": "./", "description": "Phone calls for AI agents with Callin.io" }]
+}

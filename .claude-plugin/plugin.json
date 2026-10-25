@@ -1,0 +1,10 @@
+{
+  "name": "callin",
+  "description": "Place real phone calls with Callin.io AI voice agents and read call summaries and transcripts.",
+  "version": "0.1.0",
+  "author": { "name": "Callin.io", "email": "hello@callin.io", "url": "https://callin.io" },
+  "homepage": "https://callin.io",
+  "license": "MIT",
+  "skills": "./skills",
+  "mcpServers": { "callin": { "type": "http", "url": "https://claude-mcp.callin.io/mcp" } }
+}
