@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "callin"
-version = "0.1.0"
+version = "0.1.1"
 description = "Give your AI agent a real phone line: Callin.io voice agents, calls and transcripts for Python, LangChain and CrewAI."
 readme = "README.md"
 requires-python = ">=3.9"

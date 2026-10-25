@@ -2,6 +2,17 @@
 const DEFAULT_BASE_URL = "https://api.callin.io/api";
 const FINAL = new Set(["completed", "done", "ended", "failed", "no-answer", "no_answer", "busy", "voicemail", "canceled", "cancelled", "error"]);
 
+/** First sentence of the call per language, sent as the `greeting` variable. */
+export const GREETINGS = {
+  "it": "Buongiorno, sono un assistente virtuale basato su intelligenza artificiale e chiamo per conto di un cliente. Ha un momento?",
+  "es": "Hola, buenos días. Soy un asistente virtual de inteligencia artificial y llamo en nombre de un cliente. ¿Tiene un momento?",
+  "pt": "Olá, bom dia. Sou um assistente virtual de inteligência artificial e estou ligando em nome de um cliente. Tem um momento?",
+  "en": "Hello, I'm an AI assistant calling on behalf of a customer. Is now a good moment for a quick question?",
+  "fr": "Bonjour, je suis un assistant virtuel basé sur l'intelligence artificielle et j'appelle de la part d'un client. Avez-vous un instant ?",
+  "de": "Guten Tag, ich bin ein KI-Assistent und rufe im Auftrag eines Kunden an. Haben Sie einen Moment Zeit?",
+  "nl": "Goedendag, ik ben een AI-assistent en ik bel namens een klant. Heeft u even een moment?"
+};
+
 export class CallinError extends Error {
   constructor(message, status, details) { super(message); this.status = status; this.details = details; }
 }
@@ -41,6 +52,8 @@ export class Callin {
     if (contactName) contact.name = contactName;
     if (context) contact.context = context;
     if (language) contact.language = language;
+    const greeting = GREETINGS[(language || "").toLowerCase().slice(0, 2)];
+    if (greeting && !("greeting" in variables)) contact.greeting = greeting;
     const name = `agent-call ${new Date().toISOString()}`;
     const camp = await this.request("POST", "/public/v1/campaigns", { body: { name, agentId: agent, contacts: [contact], launch: true } });
     return { campaignId: camp.campaignId, status: camp.status || "queued", finished: false, to };

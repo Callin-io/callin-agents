@@ -1,6 +1,6 @@
 {
   "name": "callin-sdk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Give your AI agent a real phone line: place calls and read results with Callin.io voice agents.",
   "type": "module",
   "main": "src/index.js",

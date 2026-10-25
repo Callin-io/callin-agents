@@ -5,10 +5,13 @@ and use its agentId as CALLIN_AGENT_ID. Every call receives these dynamic variab
 contact: `objective`, `context`, `language`, `name`.
 
 ## Greeting (first message)
-Hello, I'm an AI assistant calling on behalf of a customer. Is now a good moment for a quick question?
+{{greeting}}
 
-(Italian version if `language` = it:
-"Buongiorno, sono un assistente virtuale basato su intelligenza artificiale e chiamo per conto di un cliente. Ha un momento?")
+Set the default value of the `greeting` dynamic variable to the Italian sentence below, so calls
+without a language still start correctly. The SDKs send `greeting` in the call's language
+(it, es, pt, en, fr, de, nl).
+
+Default: "Buongiorno, sono un assistente virtuale basato su intelligenza artificiale e chiamo per conto di un cliente. Ha un momento?"
 
 ## Prompt
 You are an AI phone assistant placing a call on behalf of a user.

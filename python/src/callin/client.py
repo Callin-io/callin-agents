@@ -119,6 +119,17 @@ class Callin:
         return self._request("GET", f"/public/v1/conversations/{conversation_id}")
 
     # ---- phone calls -----------------------------------------------------
+    #: First sentence of the call per language, sent as the ``greeting`` variable.
+    GREETINGS: Dict[str, str] = {
+        "it": "Buongiorno, sono un assistente virtuale basato su intelligenza artificiale e chiamo per conto di un cliente. Ha un momento?",
+        "es": "Hola, buenos días. Soy un asistente virtual de inteligencia artificial y llamo en nombre de un cliente. ¿Tiene un momento?",
+        "pt": "Olá, bom dia. Sou um assistente virtual de inteligência artificial e estou ligando em nome de um cliente. Tem um momento?",
+        "en": "Hello, I'm an AI assistant calling on behalf of a customer. Is now a good moment for a quick question?",
+        "fr": "Bonjour, je suis un assistant virtuel basé sur l'intelligence artificielle et j'appelle de la part d'un client. Avez-vous un instant ?",
+        "de": "Guten Tag, ich bin ein KI-Assistent und rufe im Auftrag eines Kunden an. Haben Sie einen Moment Zeit?",
+        "nl": "Goedendag, ik ben een AI-assistent en ik bel namens een klant. Heeft u even een moment?"
+    }
+
     def place_call(self, to: str, objective: str, *, context: str = "", language: str = "",
                    agent_id: Optional[str] = None, contact_name: str = "",
                    variables: Optional[Dict[str, Any]] = None, wait: bool = False,
@@ -144,6 +155,9 @@ class Callin:
             contact["context"] = context
         if language:
             contact["language"] = language
+        greeting = self.GREETINGS.get((language or "").lower()[:2])
+        if greeting:
+            contact["greeting"] = greeting
         for k, v in (variables or {}).items():
             contact[k] = v
         name = f"agent-call {time.strftime('%Y-%m-%d %H:%M:%S')} {uuid.uuid4().hex[:6]}"
