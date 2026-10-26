@@ -12,6 +12,7 @@
 | OpenClaw / Claude skills | [`skills/callin-phone/SKILL.md`](skills/callin-phone/SKILL.md) |
 | n8n | community node `n8n-nodes-callin` |
 | REST | [API reference](https://support.callin.io/api-reference/introduction) · [OpenAPI](https://support.callin.io/openapi.json) |
+| Open voice-AI benchmark (IT/ES/PT) | [`benchmark/`](benchmark/) — method, scenarios, measurement scripts |
 
 ## Quickstart (Python)
 
