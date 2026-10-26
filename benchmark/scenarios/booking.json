@@ -1,0 +1,54 @@
+{
+  "business_name": {
+    "it": "Trattoria Da Mario",
+    "es": "Restaurante Casa Lola",
+    "pt": "Restaurante Sabor da Casa"
+  },
+  "knowledge": {
+    "it": "Aperti martedì-domenica 12:30-15:00 e 19:30-23:30. Lunedì chiuso. Tavoli fino a 8 persone.",
+    "es": "Abierto de martes a domingo de 13:00 a 16:00 y de 20:00 a 23:30. Lunes cerrado. Mesas hasta 8 personas.",
+    "pt": "Aberto de terça a domingo, 12h às 15h e 19h às 23h30. Segunda fechado. Mesas até 8 pessoas."
+  },
+  "caller_lines": {
+    "it": [
+      "Buonasera, vorrei prenotare un tavolo per sabato.",
+      "Siamo in quattro, verso le nove meno un quarto.",
+      "A nome Esposito, Gennaro Esposito.",
+      "Il numero è tre quattro sette, due due uno, otto nove zero sei.",
+      "Perfetto, grazie mille."
+    ],
+    "es": [
+      "Hola, buenas, quería reservar mesa para el sábado.",
+      "Seríamos cuatro, sobre las nueve menos cuarto.",
+      "A nombre de Rocío Fernández Caballero.",
+      "Mi número es seis cuatro siete, dos dos uno, ochenta y nueve cero seis.",
+      "Perfecto, muchas gracias."
+    ],
+    "pt": [
+      "Oi, boa noite, queria reservar uma mesa pro sábado.",
+      "Somos quatro pessoas, umas nove menos quinze.",
+      "No nome de João Henrique Albuquerque.",
+      "O telefone é onze, nove oito sete seis cinco, quatro três dois um.",
+      "Perfeito, muito obrigado."
+    ]
+  },
+  "expected": {
+    "people": 4,
+    "time": "20:45",
+    "day": "saturday"
+  },
+  "test_phrases": {
+    "it": [
+      "Gennaro Esposito",
+      "tre quattro sette due due uno otto nove zero sei"
+    ],
+    "es": [
+      "Rocío Fernández Caballero",
+      "seis cuatro siete dos dos uno ochenta y nueve cero seis"
+    ],
+    "pt": [
+      "João Henrique Albuquerque",
+      "onze nove oito sete seis cinco quatro três dois um"
+    ]
+  }
+}

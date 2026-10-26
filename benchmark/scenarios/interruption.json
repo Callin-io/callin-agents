@@ -1,0 +1,34 @@
+{
+  "business_name": {
+    "it": "Trattoria Da Mario",
+    "es": "Restaurante Casa Lola",
+    "pt": "Restaurante Sabor da Casa"
+  },
+  "knowledge": {
+    "it": "Come booking.",
+    "es": "Como booking.",
+    "pt": "Como booking."
+  },
+  "caller_lines": {
+    "it": [
+      "Vorrei prenotare per venerdì sera per sei persone, anzi no, scusi, per sabato e siamo in cinque.",
+      "Alle nove.",
+      "Rossi."
+    ],
+    "es": [
+      "Quería reservar el viernes por la noche para seis, bueno no, perdona, mejor el sábado y somos cinco.",
+      "A las nueve y media.",
+      "García."
+    ],
+    "pt": [
+      "Queria reservar pra sexta à noite pra seis, não, desculpa, melhor sábado e somos cinco.",
+      "Às nove.",
+      "Silva."
+    ]
+  },
+  "expected": {
+    "day": "saturday",
+    "people": 5
+  },
+  "barge_in": "Line 1 is played starting 300 ms into the agent's first answer to test interruption."
+}

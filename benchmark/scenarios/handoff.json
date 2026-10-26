@@ -1,0 +1,26 @@
+{
+  "business_name": {
+    "it": "Agenzia Immobiliare Casa Nuova",
+    "es": "Inmobiliaria Hogar",
+    "pt": "Imobiliária Lar"
+  },
+  "knowledge": {
+    "it": "Trasferire a un agente umano se richiesto.",
+    "es": "Transferir a un agente humano si se pide.",
+    "pt": "Transferir para um corretor se pedido."
+  },
+  "caller_lines": {
+    "it": [
+      "Buongiorno, vorrei parlare con una persona, non con una macchina."
+    ],
+    "es": [
+      "Hola, prefiero hablar con una persona, no con una máquina."
+    ],
+    "pt": [
+      "Oi, prefiro falar com uma pessoa, não com robô."
+    ]
+  },
+  "expected": {
+    "transferred": true
+  }
+}

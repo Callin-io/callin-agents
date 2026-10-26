@@ -1,0 +1,51 @@
+{
+  "business_name": {
+    "it": "Studio Dentistico Bianchi",
+    "es": "Clínica Dental Sonrisa",
+    "pt": "Clínica Odontológica Sorriso"
+  },
+  "knowledge": {
+    "it": "Appuntamenti lun-ven 9:00-19:00. Spostamenti fino a 24 ore prima senza costi. Per spostare servono nome e data di nascita.",
+    "es": "Citas de lunes a viernes de 9:00 a 19:00. Cambios gratis hasta 24 horas antes. Para cambiar una cita se piden nombre y fecha de nacimiento.",
+    "pt": "Consultas de segunda a sexta, 9h às 19h. Remarcação sem custo até 24 horas antes. Para remarcar: nome e data de nascimento."
+  },
+  "caller_lines": {
+    "it": [
+      "Salve, dovrei spostare l'appuntamento di giovedì.",
+      "Sono Lucia Ferraro, nata il dodici marzo millenovecentottantasette.",
+      "Avrei bisogno di venerdì pomeriggio, se possibile dopo le sedici.",
+      "Va benissimo, grazie."
+    ],
+    "es": [
+      "Hola, necesito cambiar la cita del jueves.",
+      "Soy Begoña Etxeberria, nacida el doce de marzo de mil novecientos ochenta y siete.",
+      "Me vendría mejor el viernes por la tarde, a partir de las cuatro.",
+      "Estupendo, gracias."
+    ],
+    "pt": [
+      "Olá, preciso remarcar a consulta de quinta.",
+      "Sou Luana Cavalcanti, nasci em doze de março de mil novecentos e oitenta e sete.",
+      "Prefiro sexta à tarde, depois das quatro.",
+      "Ótimo, obrigada."
+    ]
+  },
+  "expected": {
+    "day": "friday",
+    "after": "16:00",
+    "identity_checked": true
+  },
+  "test_phrases": {
+    "it": [
+      "Lucia Ferraro",
+      "dodici marzo millenovecentottantasette"
+    ],
+    "es": [
+      "Begoña Etxeberria",
+      "doce de marzo de mil novecientos ochenta y siete"
+    ],
+    "pt": [
+      "Luana Cavalcanti",
+      "doze de março de mil novecentos e oitenta e sete"
+    ]
+  }
+}

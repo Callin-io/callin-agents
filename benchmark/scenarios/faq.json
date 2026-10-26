@@ -1,0 +1,37 @@
+{
+  "business_name": {
+    "it": "Palestra Forma",
+    "es": "Gimnasio Activa",
+    "pt": "Academia Movimento"
+  },
+  "knowledge": {
+    "it": "Abbonamento mensile 39 euro, annuale 390 euro. Iscrizione 20 euro. Aperti lun-ven 7-22, sab 9-14. Prova gratuita di un giorno.",
+    "es": "Cuota mensual 39 euros, anual 390 euros. Matrícula 20 euros. Abierto de lunes a viernes de 7 a 22 y sábados de 9 a 14. Un día de prueba gratis.",
+    "pt": "Mensalidade 129 reais, anual 1.290 reais. Matrícula 50 reais. Segunda a sexta 6h às 22h, sábado 8h às 13h. Um dia de aula experimental grátis."
+  },
+  "caller_lines": {
+    "it": [
+      "Buongiorno, quanto costa l'abbonamento?",
+      "E il sabato fino a che ora siete aperti?",
+      "Si può fare una prova?",
+      "Grazie, arrivederci."
+    ],
+    "es": [
+      "Buenos días, ¿cuánto cuesta la cuota?",
+      "¿Y los sábados hasta qué hora abrís?",
+      "¿Se puede probar algún día?",
+      "Gracias, hasta luego."
+    ],
+    "pt": [
+      "Bom dia, quanto custa a mensalidade?",
+      "E no sábado vocês abrem até que horas?",
+      "Dá pra fazer uma aula experimental?",
+      "Obrigado, tchau."
+    ]
+  },
+  "expected": {
+    "monthly_price": true,
+    "saturday_close": true,
+    "trial": true
+  }
+}
