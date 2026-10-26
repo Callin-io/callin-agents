@@ -1,11 +1,12 @@
 {
   "name": "callin-sdk",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Give your AI agent a real phone line: place calls and read results with Callin.io voice agents.",
   "type": "module",
   "main": "src/index.js",
   "types": "src/index.d.ts",
   "files": ["src"],
+  "scripts": { "test": "node --test" },
   "keywords": ["ai agents", "phone calls", "voice ai", "telephony", "mcp", "callin"],
   "homepage": "https://callin.io",
   "repository": { "type": "git", "url": "git+https://github.com/callin-io/callin-agents.git" },

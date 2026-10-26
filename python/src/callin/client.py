@@ -7,6 +7,7 @@ as dynamic variables (`objective`, `context`, ...), which the agent's prompt use
 from __future__ import annotations
 
 import os
+import re
 import time
 import uuid
 from dataclasses import dataclass, field
@@ -16,6 +17,15 @@ import httpx
 
 DEFAULT_BASE_URL = "https://api.callin.io/api"
 FINAL_STATUSES = {"completed", "done", "ended", "failed", "no-answer", "no_answer", "busy", "voicemail", "canceled", "cancelled", "error"}
+#: Seconds before the campaign launch from which a conversation may belong to it.
+MATCH_WINDOW_BEFORE = 120
+#: Max conversations whose details are fetched when the call id is unknown.
+MAX_CANDIDATES = 10
+
+
+def _digits(number: Optional[str]) -> str:
+    """Phone number reduced to its digits, for exact comparison ("+39 011-123" -> "39011123")."""
+    return re.sub(r"\D", "", number or "")
 
 
 class CallinError(RuntimeError):
@@ -42,6 +52,11 @@ class CallResult:
     transcript: Optional[str] = None
     voicemail: Optional[bool] = None
     error: Optional[str] = None
+    #: How summary and transcript were linked to this call: "call_id" (certain),
+    #: "contact_number" (one outbound conversation of the agent to the same number
+    #: after the launch) or None (not linked: no summary is returned rather than a
+    #: possibly wrong one).
+    match: Optional[str] = None
     raw: Dict[str, Any] = field(default_factory=dict, repr=False)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -170,33 +185,46 @@ class Callin:
         return result
 
     def get_call_result(self, campaign_id: str) -> CallResult:
-        """Return the current status and, once finished, the summary and transcript of a call."""
+        """Return the current status and, once finished, the summary and transcript of a call.
+
+        Summary and transcript are attached only when the conversation is linked to this
+        call with certainty: by its call id, or, if the API gives none, by exactly one
+        outbound conversation of the same agent to the same number after the launch.
+        Otherwise they stay empty (``match`` is None): an agent shared by several users
+        must never return one user's transcript to another.
+        """
         camp = self._request("GET", f"/public/v1/campaigns/{campaign_id}")
         calls = self._request("GET", f"/public/v1/campaigns/{campaign_id}/calls", params={"pageSize": 5})
         to = ""
         contacts = camp.get("contacts") or []
         if contacts:
             to = contacts[0].get("phoneNumber", "")
+        launched_at = (camp.get("metadata") or {}).get("createdAt")
         if not calls:
             cstatus = (camp.get("status") or "queued").lower()
             res = CallResult(campaign_id=campaign_id, status=cstatus, finished=cstatus in FINAL_STATUSES,
                              to=to, raw={"campaign": camp})
             if res.finished:
-                created = (camp.get("metadata") or {}).get("createdAt")
-                conv = self._find_conversation(camp.get("agentId"), {"contactNumber": to, "startedAt": created})
-                if conv:
-                    self._fill(res, conv)
+                self._attach_conversation(res, camp.get("agentId"), None, to, launched_at)
             return res
         call = calls[0]
         status = (call.get("status") or "").lower() or "in_progress"
-        res = CallResult(campaign_id=campaign_id, status=status, finished=status in FINAL_STATUSES, to=to,
-                         call_id=call.get("callId"), duration_seconds=call.get("durationSeconds"),
+        res = CallResult(campaign_id=campaign_id, status=status, finished=status in FINAL_STATUSES,
+                         to=call.get("contactNumber") or to, call_id=call.get("callId"),
+                         duration_seconds=call.get("durationSeconds"),
                          error=call.get("errorMessage") or None, raw={"campaign": camp, "call": call})
         if res.finished:
-            conv = self._find_conversation(camp.get("agentId"), call)
-            if conv:
-                self._fill(res, conv)
+            self._attach_conversation(res, camp.get("agentId"), call.get("callId"), res.to,
+                                      call.get("startedAt") or launched_at)
         return res
+
+    def _attach_conversation(self, res: "CallResult", agent_id: Optional[str], call_id: Optional[str],
+                             to: str, started_at: Optional[str]) -> None:
+        found = self._find_conversation(agent_id, call_id, to, started_at)
+        if found:
+            conv, how = found
+            self._fill(res, conv)
+            res.match = how
 
     @staticmethod
     def _fill(res: "CallResult", conv: Dict[str, Any]) -> None:
@@ -207,46 +235,57 @@ class Callin:
         res.duration_seconds = res.duration_seconds or conv.get("conversationDuration")
         res.raw["conversation"] = conv
 
-    def wait_for_call(self, campaign_id: str, timeout_seconds: int = 600, poll_seconds: int = 10) -> CallResult:
+    def wait_for_call(self, campaign_id: str, timeout_seconds: int = 600, poll_seconds: int = 10,
+                      summary_grace_seconds: int = 90) -> CallResult:
+        """Block until the call ends; then wait up to ``summary_grace_seconds`` more for the
+        summary, which the platform may write a little after the call status turns final."""
         deadline = time.time() + timeout_seconds
         res = self.get_call_result(campaign_id)
         while not res.finished and time.time() < deadline:
             time.sleep(poll_seconds)
             res = self.get_call_result(campaign_id)
+        grace = min(deadline, time.time() + summary_grace_seconds) if res.finished else 0
+        while res.finished and res.match is None and res.call_id and time.time() < grace:
+            time.sleep(poll_seconds)
+            res = self.get_call_result(campaign_id)
         return res
 
-    def _find_conversation(self, agent_id: Optional[str], call: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-        call_id = call.get("callId")
+    def _find_conversation(self, agent_id: Optional[str], call_id: Optional[str], to: str,
+                           started_at: Optional[str]) -> Optional[tuple]:
+        """Return ``(conversation, how)`` linked to this call with certainty, or None."""
         if call_id:
             try:
                 conv = self.get_conversation(call_id)
                 conv.setdefault("conversationId", call_id)
-                return conv
+                return conv, "call_id"
             except CallinError:
                 pass
-        started = call.get("startedAt")
+        target = _digits(to)
         after = None
-        if started:
+        if started_at:
             try:
                 from datetime import datetime
-                after = int(datetime.fromisoformat(started.replace("Z", "+00:00")).timestamp()) - 120
+                after = int(datetime.fromisoformat(started_at.replace("Z", "+00:00")).timestamp()) - MATCH_WINDOW_BEFORE
             except ValueError:
                 after = None
-        number = (call.get("contactNumber") or "").replace(" ", "")
-        convs = self.list_conversations(agent_id=agent_id, page_size=20, start_after_unix=after)
-        match = None
-        if number:
-            match = next((c for c in convs if number in (c.get("contactNumber") or "") or number in (c.get("callerNumber") or "")), None)
-        if match is None and after:
-            # A dedicated "task caller" agent places one call per campaign: take the first outbound call after launch.
-            outbound = [c for c in convs if (c.get("direction") or "outbound") == "outbound" and (c.get("startTimeUnix") or 0) >= after]
-            outbound.sort(key=lambda c: c.get("startTimeUnix") or 0)
-            match = outbound[0] if outbound else None
-        if match is None:
+        # Without a number, an agent or a start time there is nothing safe to match on.
+        if not (target and agent_id and after):
             return None
-        try:
-            conv = self.get_conversation(match["conversationId"])
-            conv.setdefault("conversationId", match["conversationId"])
-            return conv
-        except CallinError:
-            return match
+        convs = self.list_conversations(agent_id=agent_id, page_size=20, start_after_unix=after)
+        candidates = [c for c in convs
+                      if (c.get("direction") or "outbound") == "outbound"
+                      and (c.get("startTimeUnix") or 0) >= after][:MAX_CANDIDATES]
+        matches = []
+        for c in candidates:
+            try:
+                detail = self.get_conversation(c["conversationId"])
+            except CallinError:
+                continue
+            detail.setdefault("conversationId", c["conversationId"])
+            # The list does not carry the number: compare on the detail, digits only, exactly.
+            if _digits(detail.get("contactNumber")) == target:
+                matches.append(detail)
+        # Two calls of this agent to the same number in the window: ambiguous, return nothing.
+        if len(matches) == 1:
+            return matches[0], "contact_number"
+        return None

@@ -4,14 +4,14 @@ build-backend = "hatchling.build"
 
 [project]
 name = "langchain-callin"
-version = "0.1.0"
+version = "0.1.1"
 description = "LangChain integration for Callin.io: let your agent place real phone calls with an AI voice agent and read the summary and transcript."
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
 authors = [{ name = "Callin.io", email = "hello@callin.io" }]
 keywords = ["langchain", "ai agents", "phone calls", "voice ai", "telephony", "callin"]
-dependencies = ["callin>=0.1.0", "langchain-core>=0.2"]
+dependencies = ["callin>=0.1.2", "langchain-core>=0.2"]
 classifiers = ["Programming Language :: Python :: 3", "License :: OSI Approved :: MIT License", "Topic :: Communications :: Telephony"]
 
 [project.urls]
