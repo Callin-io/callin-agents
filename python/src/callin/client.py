@@ -15,6 +15,13 @@ from typing import Any, Dict, List, Optional
 
 import httpx
 
+from importlib.metadata import PackageNotFoundError, version as _version
+
+try:
+    __version__ = _version("callin")
+except PackageNotFoundError:
+    __version__ = "0.0.0+source"
+
 DEFAULT_BASE_URL = "https://api.callin.io/api"
 FINAL_STATUSES = {"completed", "done", "ended", "failed", "no-answer", "no_answer", "busy", "voicemail", "canceled", "cancelled", "error"}
 #: Seconds before the campaign launch from which a conversation may belong to it.
@@ -80,7 +87,7 @@ class Callin:
             raise CallinError("Missing API key: pass api_key= or set CALLIN_API_KEY")
         self.agent_id = agent_id or os.environ.get("CALLIN_AGENT_ID")
         self._http = httpx.Client(base_url=base_url.rstrip("/"), timeout=timeout,
-                                  headers={"x-api-key": self.api_key, "user-agent": "callin-python/0.1.0"})
+                                  headers={"x-api-key": self.api_key, "user-agent": f"callin-python/{__version__}"})
 
     # ---- low level -------------------------------------------------------
     def _request(self, method: str, path: str, **kw) -> Any:

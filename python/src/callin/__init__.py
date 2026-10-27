@@ -2,4 +2,8 @@
 from .client import Callin, CallinError, CallResult
 
 __all__ = ["Callin", "CallinError", "CallResult"]
-__version__ = "0.1.0"
+try:  # the installed distribution is the single source of the version number
+    from importlib.metadata import version as _version
+    __version__ = _version("callin")
+except Exception:  # running from a source checkout
+    __version__ = "0.0.0+source"
