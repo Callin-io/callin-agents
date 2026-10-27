@@ -19,10 +19,11 @@ python -m build && python -m twine upload dist/*
 ```
 (serve un account pypi.org e un token API; il nome `callin` va registrato al primo caricamento)
 
-## 3. npm (`callin-sdk`, nome libero)
-```bash
-cd js && npm login && npm publish --access public
-```
+## 3. npm (`callin-sdk`)
+Pubblicazione fidata, senza chiavi: GitHub → Actions → "Publish callin-sdk to npm" → Run workflow (ramo `main`).
+Prerequisito una tantum su npmjs.com → pacchetto `callin-sdk` → Settings → Trusted Publisher → GitHub Actions:
+organizzazione `Callin-io`, repository `callin-agents`, file `publish-npm.yml`, ambiente `npm`.
+Ricordarsi di aumentare `version` in `js/package.json` e la versione nel `user-agent` di `js/src/index.js` prima di pubblicare.
 
 ## 4. ClawHub — abilità per OpenClaw
 ```bash

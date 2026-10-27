@@ -34,7 +34,7 @@ export class Callin {
     for (const [k, v] of Object.entries(query || {})) if (v !== undefined && v !== null) url.searchParams.set(k, String(v));
     const res = await fetch(url, {
       method,
-      headers: { "x-api-key": this.apiKey, "content-type": "application/json", "user-agent": "callin-js/0.1.0" },
+      headers: { "x-api-key": this.apiKey, "content-type": "application/json", "user-agent": "callin-js/0.1.2" },
       body: body ? JSON.stringify(body) : undefined,
     });
     let data; try { data = await res.json(); } catch { throw new CallinError(`HTTP ${res.status}`, res.status); }
