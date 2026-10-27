@@ -41,6 +41,10 @@ console.log(await callin.waitForCall(campaignId));
 1. Create a voice agent in [app.callin.io](https://app.callin.io) with a phone number, using the [Task Caller template](task-caller-agent/prompt.md). Its id is `CALLIN_AGENT_ID`.
 2. `place_call` starts a one-contact campaign for that agent and passes `objective`, `context` and `language` as dynamic variables.
 3. `get_call_result` / `wait_for_call` returns status, summary and transcript when the call ends.
+   Summary and transcript are attached only when the conversation is linked to the call with certainty
+   (`match`: `call_id`, or `contact_number` when exactly one outbound conversation of the agent reached that
+   number after the launch). If the link is uncertain they stay empty rather than risk showing another call.
+   When many end users share your integration, give each user their own agent.
 
 ## Responsible use
 Call only when your user asks you to, and only numbers they give you or public business numbers. No unsolicited marketing, no emergency numbers, no payment card data over the phone. The agent always states that it is an AI.
