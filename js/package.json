@@ -9,7 +9,7 @@
   "scripts": { "test": "node --test" },
   "keywords": ["ai agents", "phone calls", "voice ai", "telephony", "mcp", "callin"],
   "homepage": "https://callin.io",
-  "repository": { "type": "git", "url": "git+https://github.com/callin-io/callin-agents.git" },
+  "repository": { "type": "git", "url": "git+https://github.com/Callin-io/callin-agents.git" },
   "license": "MIT",
   "engines": { "node": ">=18" }
 }
