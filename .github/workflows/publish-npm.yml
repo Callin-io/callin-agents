@@ -1,4 +1,4 @@
-name: Publish callin-sdk to npm
+name: Publish callin-sdk to npm (staged, needs approval)
 on:
   workflow_dispatch:
 jobs:
@@ -17,6 +17,9 @@ jobs:
         with:
           node-version: "24"
           registry-url: "https://registry.npmjs.org"
-      - run: npm install -g npm@latest   # trusted publishing needs npm 11.5.1 or later
+      - run: npm install -g npm@latest   # staged publishing needs npm 11.15.0 or later
+      - run: npm --version
       - run: npm test
-      - run: npm publish --access public --provenance
+      # The trusted publisher may only stage: a maintainer approves the version on
+      # npmjs.com (package > Staged Packages > Approve, with 2FA) before it goes live.
+      - run: npm stage publish --access public
