@@ -14,6 +14,26 @@
 | REST | [API reference](https://support.callin.io/api-reference/introduction) · [OpenAPI](https://support.callin.io/openapi.json) |
 | Open voice-AI benchmark (IT/ES/PT) | [`benchmark/`](benchmark/) — method, scenarios, measurement scripts |
 
+## Get your API key
+
+Placing a call requires a Callin.io account, an API key, an outbound voice agent with a phone number, and available minutes (new accounts start with 30 free minutes).
+
+1. Create an account at [app.callin.io/signup](https://app.callin.io/signup).
+2. Sign in at [app.callin.io](https://app.callin.io). Click your name at the bottom of the left sidebar to open **Profile**, then open the **API Keys** tab. If it says "No API key found", click **Regenerate Key** and copy the key. Regenerating immediately invalidates the previous key. Details: [API reference](https://support.callin.io/api-reference/introduction).
+3. Create an outbound voice agent and assign it a phone number. Use the [Task Caller template](task-caller-agent/prompt.md) so the SDK can pass `objective`, `context` and `language`. The agent's id is `CALLIN_AGENT_ID`.
+4. Export the values in your shell (never commit them):
+
+```bash
+export CALLIN_API_KEY=...
+export CALLIN_AGENT_ID=...
+```
+
+There is no public deep link to the API Keys tab; it lives inside the logged-in app.
+
+## Use it from Claude (MCP)
+
+Claude, ChatGPT, Cursor, VS Code and the OpenAI Agents SDK can connect with OAuth, without pasting an API key: add the MCP server `https://claude-mcp.callin.io/mcp` (registry name `io.callin/callin`). You will sign in to Callin.io and approve access. Use an API key only if you want to connect a different Callin account from the one you are signed in with. Guide: [Callin for Claude](https://support.callin.io/integrations/claude).
+
 ## Quickstart (Python)
 
 ```python
