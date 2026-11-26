@@ -48,6 +48,28 @@ result = Callin().place_call(
 print(result.status, result.summary)
 ```
 
+## Quickstart (Italian / Spanish)
+
+```python
+from callin import Callin  # env: CALLIN_API_KEY, CALLIN_AGENT_ID
+
+it = Callin().place_call(
+    "+390111234567",
+    objective="Prenota un tavolo per 2 domani alle 20:30 a nome Rossi",
+    context="Tavolo per 2, preferibilmente al chiuso.",
+    language="it",
+    contact_name="Rossi",
+    wait=True,
+)
+
+es = Callin().place_call(
+    "+34911234567",
+    objective="Pedir la primera cita libre de la semana que viene",
+    language="es",
+    wait=True,
+)
+```
+
 ## Quickstart (Node)
 
 ```js
