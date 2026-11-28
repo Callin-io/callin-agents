@@ -2,6 +2,10 @@
 
 **Give your AI agent a real phone line.** Callin.io places phone calls with an AI voice agent and returns what happened: status, summary and transcript. Calls in Italian, Spanish, Portuguese, English, French, German, Dutch and Hindi, GDPR compliant, and every call discloses that it is an AI.
 
+[![PyPI](https://img.shields.io/pypi/v/callin)](https://pypi.org/project/callin/)
+[![npm](https://img.shields.io/npm/v/callin-sdk)](https://www.npmjs.com/package/callin-sdk)
+[![PyPI langchain-callin](https://img.shields.io/pypi/v/langchain-callin)](https://pypi.org/project/langchain-callin/)
+
 | Use it from | How |
 |---|---|
 | Claude, ChatGPT, Cursor, VS Code, OpenAI Agents SDK | MCP server `https://claude-mcp.callin.io/mcp` (OAuth) — registry name `io.callin/callin` |
